@@ -1,0 +1,366 @@
+class Customer:
+    def __init__(self, Name, Email, Phone, CreditCard):
+        """
+        Initialize a new Customer with name, email, phone, and credit card details.
+        """
+        self.__Name = Name
+        self.__Email = Email
+        self.__Phone = Phone
+        self.__CreditCard = CreditCard
+
+    # Getters and Setters
+    def GetName(self):
+        """
+        Get the customer's name.
+        """
+        return self.__Name
+
+    def SetName(self, Name):
+        """
+        Set the customer's name.
+        """
+        self.__Name = Name
+
+    def GetEmail(self):
+        """
+        Get the customer's email address.
+        """
+        return self.__Email
+
+    def SetEmail(self, Email):
+        """
+        Set the customer's email address.
+        """
+        self.__Email = Email
+
+    def GetPhone(self):
+        """
+        Get the customer's phone number.
+        """
+        return self.__Phone
+
+    def SetPhone(self, Phone):
+        """
+        Set the customer's phone number.
+        """
+        self.__Phone = Phone
+
+    def GetCreditCard(self):
+        """
+        Get the customer's credit card details.
+        """
+        return self.__CreditCard
+
+    def SetCreditCard(self, CreditCard):
+        """
+        Set the customer's credit card details.
+        """
+        self.__CreditCard = CreditCard
+
+    # Reservation-related methods
+    def MakeReservation(self):
+        """
+        This method initiates the reservation process.
+        The actual logic for making a reservation will be implemented here.
+        """
+        pass
+
+    def ViewReservation(self):
+        """
+        This method allows the customer to view their reservation details.
+        The actual logic for retrieving and displaying reservation information will be implemented here.
+        """
+        pass
+
+    def CancelReservation(self):
+        """
+        This method allows the customer to cancel an existing reservation.
+        The actual logic for canceling the reservation will be implemented here.
+        """
+        pass
+
+
+class Reservation:
+    def __init__(self, ReservationID, CheckInDate, CheckOutDate, RoomType, Nights, PricePerNight):
+        """
+        Initialize a new Reservation with details like ID, check-in/check-out dates, room type,
+        number of nights, and price per night.
+        """
+        self.__ReservationID = ReservationID
+        self.__CheckInDate = CheckInDate
+        self.__CheckOutDate = CheckOutDate
+        self.__RoomType = RoomType
+        self.__Nights = Nights
+        self.__PricePerNight = PricePerNight
+
+    # Getters and Setters
+    def GetReservationID(self):
+        """
+        Get the reservation ID.
+        """
+        return self.__ReservationID
+
+    def SetReservationID(self, ReservationID):
+        """
+        Set the reservation ID.
+        """
+        self.__ReservationID = ReservationID
+
+    def GetCheckInDate(self):
+        """
+        Get the check-in date for the reservation.
+        """
+        return self.__CheckInDate
+
+    def SetCheckInDate(self, CheckInDate):
+        """
+        Set the check-in date for the reservation.
+        """
+        self.__CheckInDate = CheckInDate
+
+    def GetCheckOutDate(self):
+        """
+        Get the check-out date for the reservation.
+        """
+        return self.__CheckOutDate
+
+    def SetCheckOutDate(self, CheckOutDate):
+        """
+        Set the check-out date for the reservation.
+        """
+        self.__CheckOutDate = CheckOutDate
+
+    def GetRoomType(self):
+        """
+        Get the type of room reserved.
+        """
+        return self.__RoomType
+
+    def SetRoomType(self, RoomType):
+        """
+        Set the type of room reserved.
+        """
+        self.__RoomType = RoomType
+
+    def GetNights(self):
+        """
+        Get the number of nights for the reservation.
+        """
+        return self.__Nights
+
+    def SetNights(self, Nights):
+        """
+        Set the number of nights for the reservation.
+        """
+        self.__Nights = Nights
+
+    def GetPricePerNight(self):
+        """
+        Get the price per night for the reserved room.
+        """
+        return self.__PricePerNight
+
+    def SetPricePerNight(self, PricePerNight):
+        """
+        Set the price per night for the reserved room.
+        """
+        self.__PricePerNight = PricePerNight
+
+    def CalculateTotal(self):
+        """
+        Calculate the total cost of the reservation by multiplying the number of nights
+        with the price per night.
+        """
+        return self.__Nights * self.__PricePerNight
+
+    def GenerateConfirmation(self):
+        """
+        This method generates a confirmation for the reservation.
+        The logic for generating and sending the confirmation will be implemented here.
+        """
+        pass
+
+
+class Room:
+    def __init__(self, RoomNumber, RoomType, PricePerNight, IsAvailable=True):
+        """
+        Initialize a new Room with a room number, type, price per night, and availability status.
+        """
+        self.__RoomNumber = RoomNumber
+        self.__RoomType = RoomType
+        self.__PricePerNight = PricePerNight
+        self.__IsAvailable = IsAvailable
+
+    # Getters and Setters
+    def GetRoomNumber(self):
+        """
+        Get the room number.
+        """
+        return self.__RoomNumber
+
+    def SetRoomNumber(self, RoomNumber):
+        """
+        Set the room number.
+        """
+        self.__RoomNumber = RoomNumber
+
+    def GetRoomType(self):
+        """
+        Get the type of the room.
+        """
+        return self.__RoomType
+
+    def SetRoomType(self, RoomType):
+        """
+        Set the type of the room.
+        """
+        self.__RoomType = RoomType
+
+    def GetPricePerNight(self):
+        """
+        Get the price per night for the room.
+        """
+        return self.__PricePerNight
+
+    def SetPricePerNight(self, PricePerNight):
+        """
+        Set the price per night for the room.
+        """
+        self.__PricePerNight = PricePerNight
+
+    def GetIsAvailable(self):
+        """
+        Get the availability status of the room.
+        """
+        return self.__IsAvailable
+
+    def SetIsAvailable(self, IsAvailable):
+        """
+        Set the availability status of the room.
+        """
+        self.__IsAvailable = IsAvailable
+
+    def UpdateAvailability(self):
+        """
+        This method updates the availability status of the room.
+        The logic for updating the availability will be implemented here.
+        """
+        pass
+
+
+class Payment:
+    def __init__(self, PaymentID, Amount, PaymentMethod, CreditCard):
+        """
+        Initialize a new Payment with a payment ID, amount, payment method, and credit card details.
+        """
+        self.__PaymentID = PaymentID
+        self.__Amount = Amount
+        self.__PaymentMethod = PaymentMethod
+        self.__CreditCard = CreditCard
+
+    # Getters and Setters
+    def GetPaymentID(self):
+        """
+        Get the payment ID.
+        """
+        return self.__PaymentID
+
+    def SetPaymentID(self, PaymentID):
+        """
+        Set the payment ID.
+        """
+        self.__PaymentID = PaymentID
+
+    def GetAmount(self):
+        """
+        Get the payment amount.
+        """
+        return self.__Amount
+
+    def SetAmount(self, Amount):
+        """
+        Set the payment amount.
+        """
+        self.__Amount = Amount
+
+    def GetPaymentMethod(self):
+        """
+        Get the payment method (e.g., credit card, cash).
+        """
+        return self.__PaymentMethod
+
+    def SetPaymentMethod(self, PaymentMethod):
+        """
+        Set the payment method (e.g., credit card, cash).
+        """
+        self.__PaymentMethod = PaymentMethod
+
+    def GetCreditCard(self):
+        """
+        Get the credit card details.
+        """
+        return self.__CreditCard
+
+    def SetCreditCard(self, CreditCard):
+        """
+        Set the credit card details.
+        """
+        self.__CreditCard = CreditCard
+
+    def ProcessPayment(self):
+        """
+        This method processes the payment.
+        The logic for processing the payment will be implemented here.
+        """
+        pass
+
+    def GenerateReceipt(self):
+        """
+        This method generates a receipt for the payment.
+        The logic for generating and sending the receipt will be implemented here.
+        """
+        pass
+print("")
+# Create a Customer object
+customer = Customer("Ibrahim", "202204285@zu.ac.ae", "0507453322", "Visa ending in 2666")
+
+# Print customer information using getters
+print("Customer Information:")
+print("Name: " + customer.GetName())
+print("Email: " + customer.GetEmail())
+print("Phone: " + customer.GetPhone())
+print("Credit Card: " + customer.GetCreditCard())
+print("")
+
+# Create a Room object
+room = Room(101, "Deluxe Suite", 200.00)
+
+# Print room information using getters
+print("Room Information:")
+print("Room Number: " + str(room.GetRoomNumber()))
+print("Room Type: " + room.GetRoomType())
+print("Price per Night: " + str(room.GetPricePerNight()))
+print("Availability: " + ("Available" if room.GetIsAvailable() else "Not Available"))
+print("")
+
+# Create a Reservation object
+reservation = Reservation(2592024, "2024-9-28", "2024-10-05", room.GetRoomType(), 7, room.GetPricePerNight())
+
+# Print reservation details using getters
+print("Reservation Information:")
+print("Reservation ID: " + str(reservation.GetReservationID()))
+print("Check-In Date: " + reservation.GetCheckInDate())
+print("Check-Out Date: " + reservation.GetCheckOutDate())
+print("Room Type: " + reservation.GetRoomType())
+print("Number of Nights: " + str(reservation.GetNights()))
+print("Total Price: " + str(reservation.CalculateTotal()))
+print("")
+# Create a Payment object
+payment = Payment(123456, reservation.CalculateTotal(), "Credit Card", customer.GetCreditCard())
+
+# Print payment information using getters
+print("Payment Information:")
+print("Payment ID: " + str(payment.GetPaymentID()))
+print("Amount: " + str(payment.GetAmount()))
+print("Payment Method: " + payment.GetPaymentMethod())
+print("Credit Card: " + payment.GetCreditCard())
