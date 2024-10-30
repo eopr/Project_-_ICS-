@@ -1,1 +1,76 @@
+class EBook:
+    def __init__(self, title, author, publication_date, genre, price):
+        """
+        Initializes an EBook with title, author, publication date, genre, and price.
+        """
+        self._title = title
+        self._author = author
+        self._publication_date = publication_date
+        self._genre = genre
+        self._price = price
 
+    def get_title(self):
+        """
+        Returns the title of the e-book.
+        """
+        return self._title
+
+    def set_title(self, title):
+        """
+        Sets a new title for the e-book.
+        """
+        self._title = title
+
+    def get_author(self):
+        """
+        Returns the author of the e-book.
+        """
+        return self._author
+
+    def set_author(self, author):
+        """
+        Sets a new author for the e-book.
+        """
+        self._author = author
+
+    def get_publication_date(self):
+        """
+        Returns the publication date of the e-book.
+        """
+        return self._publication_date
+
+    def set_publication_date(self, date):
+        """
+        Sets a new publication date for the e-book.
+        """
+        self._publication_date = date
+
+    def get_genre(self):
+        """
+        Returns the genre of the e-book.
+        """
+        return self._genre
+
+    def set_genre(self, genre):
+        """
+        Sets a new genre for the e-book.
+        """
+        self._genre = genre
+
+    def get_price(self):
+        """
+        Returns the price of the e-book.
+        """
+        return self._price
+
+    def set_price(self, price):
+        """
+        Sets a new price for the e-book.
+        """
+        self._price = price
+
+    def __str__(self):
+        """
+        Returns a string representation of the e-book details.
+        """
+        return self._title, "by", self._author, ", Genre:", self._genre, ", Price: AED", str(self._price)
