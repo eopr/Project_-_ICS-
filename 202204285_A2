@@ -74,3 +74,44 @@ class EBook:
         Returns a string representation of the e-book details.
         """
         return self._title, "by", self._author, ", Genre:", self._genre, ", Price: AED", str(self._price)
+class Catalog:
+    def __init__(self):
+        """
+        Initializes the Catalog with an empty list of e-books.
+        """
+        self._ebooks = []
+
+    def add_ebook(self, ebook):
+        """
+        Adds an e-book to the catalog.
+        """
+        self._ebooks.append(ebook)
+
+    def remove_ebook(self, ebook):
+        """
+        Removes an e-book from the catalog.
+        """
+        if ebook in self._ebooks:
+            self._ebooks.remove(ebook)
+
+    def search_ebook(self, title):
+        """
+        Searches for an e-book by title.
+        Returns the e-book if found, else returns None.
+        """
+        for ebook in self._ebooks:
+            if ebook.get_title() == title:
+                return ebook
+        return None
+
+    def get_ebooks(self):
+        """
+        Returns the list of e-books in the catalog.
+        """
+        return self._ebooks
+
+    def set_ebooks(self, ebooks):
+        """
+        Sets the list of e-books in the catalog.
+        """
+        self._ebooks = ebooks
