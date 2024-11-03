@@ -115,3 +115,117 @@ class Catalog:
         Sets the list of e-books in the catalog.
         """
         self._ebooks = ebooks
+
+class Customer:
+    def __init__(self, name, contact_info, loyalty_status=False):
+        """
+        Initializes a Customer with a name, contact information, and loyalty status.
+        """
+        self._name = name
+        self._contact_info = contact_info
+        self._loyalty_status = loyalty_status
+
+    def update_contact_info(self, new_info):
+        """
+        Updates the customer's contact information.
+        """
+        self._contact_info = new_info
+
+    def apply_loyalty_discount(self):
+        """
+        Checks if the customer is eligible for a loyalty discount.
+        Returns True if eligible, False otherwise.
+        """
+        return self._loyalty_status
+
+    def get_name(self):
+        """
+        Returns the name of the customer.
+        """
+        return self._name
+
+    def set_name(self, name):
+        """
+        Sets a new name for the customer.
+        """
+        self._name = name
+
+    def get_contact_info(self):
+        """
+        Returns the contact information of the customer.
+        """
+        return self._contact_info
+
+    def set_contact_info(self, contact_info):
+        """
+        Sets new contact information for the customer.
+        """
+        self._contact_info = contact_info
+
+    def get_loyalty_status(self):
+        """
+        Returns the loyalty status of the customer.
+        """
+        return self._loyalty_status
+
+    def set_loyalty_status(self, status):
+        """
+        Sets a new loyalty status for the customer.
+        """
+        self._loyalty_status = status
+
+class ShoppingCart:
+    def __init__(self):
+        """
+        Initializes an empty shopping cart.
+
+        # Composition Relationship
+        # The ShoppingCart is dependent on the Customer class.
+        # Each Customer has their own ShoppingCart, which ceases to exist if the Customer is deleted.
+        """
+        self._items = {}
+
+    def add_item(self, ebook, quantity=1):
+        """
+        Adds an e-book to the cart with a specified quantity.
+        If the e-book already exists in the cart, updates the quantity.
+        """
+        if ebook in self._items:
+            self._items[ebook] += quantity
+        else:
+            self._items[ebook] = quantity
+
+    def remove_item(self, ebook):
+        """
+        Removes an e-book from the cart if it exists.
+        """
+        if ebook in self._items:
+            del self._items[ebook]
+
+    def update_quantity(self, ebook, quantity):
+        """
+        Updates the quantity of a specified e-book in the cart.
+        """
+        if ebook in self._items:
+            self._items[ebook] = quantity
+
+    def calculate_total(self):
+        """
+        Calculates and returns the total cost of items in the cart.
+        """
+        total = 0
+        for ebook, quantity in self._items.items():
+            total += ebook.get_price() * quantity
+        return total
+
+    def get_items(self):
+        """
+        Returns the dictionary of items in the cart.
+        """
+        return self._items
+
+    def set_items(self, items):
+        """
+        Sets a new dictionary of items in the cart.
+        """
+        self._items = items
