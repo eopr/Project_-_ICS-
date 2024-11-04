@@ -356,3 +356,118 @@ class Invoice:
         """
         self._amount_due = amount_due
 
+class Discount:
+    def __init__(self, discount_type, discount_amount):
+        self._discount_type = discount_type
+        self._discount_amount = discount_amount
+
+    def calculate_discount(self, order):
+        """
+        Calculates the discount based on the order's subtotal (before VAT).
+        """
+        return order._subtotal * (self._discount_amount / 100)
+
+    def is_applicable(self, order):
+        """
+        Determines if the discount is applicable:
+        - 'loyalty' applies if the customer has loyalty status.
+        - 'bulk' applies if there are 5 or more items in the order.
+        """
+        if self._discount_type == "loyalty":
+            return order._customer.get_loyalty_status()
+        elif self._discount_type == "bulk":
+            return len(order.get_ebooks()) >= 5
+        return False
+
+print("______________________________________________________________________________________________")
+# Create several EBook instances
+ebook1 = EBook("Pigeon Precision: Training Birds to Target with Thermal Imaging", "Ibrahim", "2024", "Advanced Warfare", 500)
+ebook2 = EBook("Debugging with a Magnifying Glass: The Beginner’s Guide", "Ibrahim", "2022", "Programming", 99)
+ebook3 = EBook("How to Train Your Cat to Code in Python", "Ibrahim", "2023", "Programming", 120)
+ebook4 = EBook("The Art of Writing Code in Complete Silence", "Ibrahim", "2021", "Coding", 80)
+ebook5 = EBook("Extreme Programming Under Water: A Guide for Coders Who SCUBA", "Ibrahim", "2020", "Coding", 200)
+ebook6 = EBook("How to Build a Website That Only Works on Tuesdays", "Ibrahim", "2025", "Web Design", 75)
+
+# Create a Catalog and add e-books to it
+catalog = Catalog()
+catalog.add_ebook(ebook1)
+catalog.add_ebook(ebook2)
+catalog.add_ebook(ebook3)
+catalog.add_ebook(ebook4)
+catalog.add_ebook(ebook5)
+catalog.add_ebook(ebook6)
+
+# Display the catalog contents
+print("Available EBooks in Catalog:")
+for ebook in catalog.get_ebooks():
+    print(ebook.__str__())
+print("______________________________________________________________________________________________")
+# Test 1: Customer Abdulla without loyalty buying 2 books (No Discount)
+print("Test 1: Customer Abdulla without loyalty buying 2 books")
+customer1 = Customer("Abdulla", "Abdulla@abdulla.adbulla", False)
+cart1 = ShoppingCart()
+cart1.add_item(ebook1, 1)
+cart1.add_item(ebook2, 1)
+order1 = Order("0001", "2024-10-30", customer1)
+order1.add_ebooks(ebook1)
+order1.add_ebooks(ebook2)
+print("")
+# Display Invoice without any discount
+print("Invoice Without Discount:")
+invoice1_no_discount = order1.generate_invoice()
+invoice1_no_discount.display_invoice()
+print("")
+# Apply no discount as it’s not eligible
+print("Invoice With No Applicable Discount:")
+order1.apply_discounts(Discount("none", 0))  # No discount
+invoice1_with_no_discount = order1.generate_invoice()
+invoice1_with_no_discount.display_invoice()
+print("______________________________________________________________________________________________")
+# Test 2: Customer Jasem with loyalty buying 1 book (Loyalty Discount)
+print("Test 2: Customer Jasem with loyalty buying 1 book")
+customer2 = Customer("Jasem", "Jasem@jasem.jasem", True)
+cart2 = ShoppingCart()
+cart2.add_item(ebook3, 1)
+order2 = Order("0002", "2024-10-31", customer2)
+order2.add_ebooks(ebook3)
+print("")
+# Display Invoice without loyalty discount
+print("Invoice Without Loyalty Discount:")
+invoice2_no_discount = order2.generate_invoice()
+invoice2_no_discount.display_invoice()
+print("")
+# Apply loyalty discount and display invoice
+print("Invoice With Loyalty Discount (10%):")
+loyalty_discount = Discount("loyalty", 10)  # 10% loyalty discount
+order2.apply_discounts(loyalty_discount)
+invoice2_with_loyalty_discount = order2.generate_invoice()
+invoice2_with_loyalty_discount.display_invoice()
+print("______________________________________________________________________________________________")
+# Test 3: Customer Ibrahim without loyalty buying 5 books (Bulk Discount)
+print("Test 3: Customer Ibrahim without loyalty buying 5 books (Bulk Discount)")
+customer3 = Customer("Ibrahim", "Ibrahim@ibrahim.ibrahim", False)
+cart3 = ShoppingCart()
+cart3.add_item(ebook1, 1)
+cart3.add_item(ebook2, 1)
+cart3.add_item(ebook3, 1)
+cart3.add_item(ebook4, 1)
+cart3.add_item(ebook5, 1)
+order3 = Order("0003", "2024-11-01", customer3)
+order3.add_ebooks(ebook1)
+order3.add_ebooks(ebook2)
+order3.add_ebooks(ebook3)
+order3.add_ebooks(ebook4)
+order3.add_ebooks(ebook5)
+print("")
+# Display Invoice without bulk discount
+print("Invoice Without Bulk Discount:")
+invoice3_no_discount = order3.generate_invoice()
+invoice3_no_discount.display_invoice()
+print("")
+# Apply bulk discount and display invoice
+print("Invoice With Bulk Discount (20% for 5+ books):")
+bulk_discount = Discount("bulk", 20)  # 20% bulk discount for 5 or more items
+order3.apply_discounts(bulk_discount)
+invoice3_with_bulk_discount = order3.generate_invoice()
+invoice3_with_bulk_discount.display_invoice()
+print("______________________________________________________________________________________________")
