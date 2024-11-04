@@ -15,23 +15,11 @@ class EBook:
         """
         return self._title
 
-    def set_title(self, title):
-        """
-        Sets a new title for the e-book.
-        """
-        self._title = title
-
     def get_author(self):
         """
         Returns the author of the e-book.
         """
         return self._author
-
-    def set_author(self, author):
-        """
-        Sets a new author for the e-book.
-        """
-        self._author = author
 
     def get_publication_date(self):
         """
@@ -39,23 +27,11 @@ class EBook:
         """
         return self._publication_date
 
-    def set_publication_date(self, date):
-        """
-        Sets a new publication date for the e-book.
-        """
-        self._publication_date = date
-
     def get_genre(self):
         """
         Returns the genre of the e-book.
         """
         return self._genre
-
-    def set_genre(self, genre):
-        """
-        Sets a new genre for the e-book.
-        """
-        self._genre = genre
 
     def get_price(self):
         """
@@ -63,17 +39,12 @@ class EBook:
         """
         return self._price
 
-    def set_price(self, price):
-        """
-        Sets a new price for the e-book.
-        """
-        self._price = price
-
     def __str__(self):
         """
-        Returns a string representation of the e-book details.
+        Returns a formatted string representation of the e-book details.
         """
-        return self._title, "by", self._author, ", Genre:", self._genre, ", Price: AED", str(self._price)
+        return f"{self._title} by {self._author}, Genre: {self._genre}, Price: AED {self._price:.2f}"
+
 class Catalog:
     def __init__(self):
         """
@@ -81,27 +52,27 @@ class Catalog:
         """
         self._ebooks = []
 
-    def add_ebook(self, ebook):
+    def add_ebook(self, ebook_item):
         """
         Adds an e-book to the catalog.
         """
-        self._ebooks.append(ebook)
+        self._ebooks.append(ebook_item)
 
-    def remove_ebook(self, ebook):
+    def remove_ebook(self, ebook_item):
         """
-        Removes an e-book from the catalog.
+        Removes an e-book from the catalog if it exists.
         """
-        if ebook in self._ebooks:
-            self._ebooks.remove(ebook)
+        if ebook_item in self._ebooks:
+            self._ebooks.remove(ebook_item)
 
     def search_ebook(self, title):
         """
         Searches for an e-book by title.
         Returns the e-book if found, else returns None.
         """
-        for ebook in self._ebooks:
-            if ebook.get_title() == title:
-                return ebook
+        for ebook_item in self._ebooks:
+            if ebook_item.get_title() == title:
+                return ebook_item
         return None
 
     def get_ebooks(self):
@@ -109,12 +80,6 @@ class Catalog:
         Returns the list of e-books in the catalog.
         """
         return self._ebooks
-
-    def set_ebooks(self, ebooks):
-        """
-        Sets the list of e-books in the catalog.
-        """
-        self._ebooks = ebooks
 
 class Customer:
     def __init__(self, name, contact_info, loyalty_status=False):
@@ -125,42 +90,17 @@ class Customer:
         self._contact_info = contact_info
         self._loyalty_status = loyalty_status
 
-    def update_contact_info(self, new_info):
-        """
-        Updates the customer's contact information.
-        """
-        self._contact_info = new_info
-
-    def apply_loyalty_discount(self):
-        """
-        Checks if the customer is eligible for a loyalty discount.
-        Returns True if eligible, False otherwise.
-        """
-        return self._loyalty_status
-
     def get_name(self):
         """
         Returns the name of the customer.
         """
         return self._name
 
-    def set_name(self, name):
-        """
-        Sets a new name for the customer.
-        """
-        self._name = name
-
     def get_contact_info(self):
         """
         Returns the contact information of the customer.
         """
         return self._contact_info
-
-    def set_contact_info(self, contact_info):
-        """
-        Sets new contact information for the customer.
-        """
-        self._contact_info = contact_info
 
     def get_loyalty_status(self):
         """
@@ -178,44 +118,40 @@ class ShoppingCart:
     def __init__(self):
         """
         Initializes an empty shopping cart.
-
-        # Composition Relationship
-        # The ShoppingCart is dependent on the Customer class.
-        # Each Customer has their own ShoppingCart, which ceases to exist if the Customer is deleted.
         """
         self._items = {}
 
-    def add_item(self, ebook, quantity=1):
+    def add_item(self, ebook_item, quantity=1):
         """
         Adds an e-book to the cart with a specified quantity.
         If the e-book already exists in the cart, updates the quantity.
         """
-        if ebook in self._items:
-            self._items[ebook] += quantity
+        if ebook_item in self._items:
+            self._items[ebook_item] += quantity
         else:
-            self._items[ebook] = quantity
+            self._items[ebook_item] = quantity
 
-    def remove_item(self, ebook):
+    def remove_item(self, ebook_item):
         """
         Removes an e-book from the cart if it exists.
         """
-        if ebook in self._items:
-            del self._items[ebook]
+        if ebook_item in self._items:
+            del self._items[ebook_item]
 
-    def update_quantity(self, ebook, quantity):
+    def update_quantity(self, ebook_item, quantity):
         """
         Updates the quantity of a specified e-book in the cart.
         """
-        if ebook in self._items:
-            self._items[ebook] = quantity
+        if ebook_item in self._items:
+            self._items[ebook_item] = quantity
 
     def calculate_total(self):
         """
         Calculates and returns the total cost of items in the cart.
         """
         total = 0
-        for ebook, quantity in self._items.items():
-            total += ebook.get_price() * quantity
+        for ebook_item, quantity in self._items.items():
+            total += ebook_item.get_price() * quantity
         return total
 
     def get_items(self):
@@ -224,45 +160,45 @@ class ShoppingCart:
         """
         return self._items
 
-    def set_items(self, items):
-        """
-        Sets a new dictionary of items in the cart.
-        """
-        self._items = items
-
 class Order:
     def __init__(self, order_id, order_date, customer):
+        """
+        Initializes an Order with an order ID, order date, customer, subtotal, and discount amount.
+        """
         self._order_id = order_id
         self._order_date = order_date
         self._customer = customer
         self._ebooks = []
         self._subtotal = 0.0
-        self._discount_amount = 0.0  
+        self._discount_amount = 0.0
 
-    def add_ebooks(self, ebook):
-        self._ebooks.append(ebook)
-        self._subtotal += ebook.get_price()
+    def add_ebook(self, ebook_item):
+        """
+        Adds an e-book to the order and updates the subtotal.
+        """
+        self._ebooks.append(ebook_item)
+        self._subtotal += ebook_item.get_price()
 
     def apply_discounts(self, discount):
         """
-        Applies a discount to the order if applicable.
-        Stores the discount amount to avoid recalculating it in `calculate_total`.
+        Applies a discount to the order if applicable and calculates the discount amount.
         """
         if discount.is_applicable(self):
             self._discount_amount = discount.calculate_discount(self)
 
     def calculate_total(self, with_discount=True):
         """
-        Calculates the total with VAT, optionally applying the stored discount.
+        Calculates the total amount due by applying any discounts and VAT on the subtotal.
         """
-        # Start with subtotal and apply discount if applicable
-        total = self._subtotal - self._discount_amount if with_discount else self._subtotal
-
-        # Apply VAT
+        discounted_total = self._subtotal - self._discount_amount if with_discount else self._subtotal
         vat_rate = 0.08
-        return round(total * (1 + vat_rate), 2)
+        total_with_vat = round(discounted_total * (1 + vat_rate), 2)
+        return total_with_vat
 
     def generate_invoice(self):
+        """
+        Generates an invoice for the order, detailing items, prices, and the total amount due with VAT.
+        """
         return Invoice(self, self.calculate_total())
 
     def get_order_id(self):
@@ -271,23 +207,11 @@ class Order:
         """
         return self._order_id
 
-    def set_order_id(self, order_id):
-        """
-        Sets a new order ID.
-        """
-        self._order_id = order_id
-
     def get_order_date(self):
         """
         Returns the order date.
         """
         return self._order_date
-
-    def set_order_date(self, order_date):
-        """
-        Sets a new order date.
-        """
-        self._order_date = order_date
 
     def get_ebooks(self):
         """
@@ -295,42 +219,60 @@ class Order:
         """
         return self._ebooks
 
-    def set_ebooks(self, ebooks):
+    def get_subtotal(self):
         """
-        Sets a new list of e-books for the order.
+        Returns the subtotal before any discounts or VAT.
         """
-        self._ebooks = ebooks
+        return self._subtotal
 
+    def get_discount_amount(self):
+        """
+        Returns the calculated discount amount for the order.
+        """
+        return self._discount_amount
+
+    def get_customer(self):
+        """
+        Returns the customer associated with this order.
+        """
+        return self._customer
 
 class Invoice:
     def __init__(self, order, amount_due):
         """
-        Initializes an Invoice with an associated order and total amount due.
-
-        # Composition Relationship
-        # Invoice is part of Order. If the Order is deleted, the Invoice is also deleted.
+        Initializes an Invoice with an associated order and the final total amount due.
         """
-        self._invoice_id = order.get_order_id()  # Using the order ID as the invoice ID
+        self._invoice_id = order.get_order_id()
         self._order = order
         self._amount_due = amount_due
 
     def display_invoice(self):
         """
-        Displays the invoice details, including e-book titles, prices, and the total cost.
+        Displays the full invoice details, including e-book titles, subtotal, discount, VAT, and total amount due.
         """
         print("Invoice ID:", self._invoice_id)
         print("Order Date:", self._order.get_order_date())
         print("Items:")
-        for ebook in self._order.get_ebooks():
-            print("-", ebook.get_title(), "Price: AED", ebook.get_price())
-        print("Total Amount Due (including VAT): AED", self.calculate_vat())
+        for ebook_item in self._order.get_ebooks():  # Renamed to avoid shadowing
+            print("-", ebook_item.get_title(), "Price: AED", f"{ebook_item.get_price():.2f}")
+
+        # Fetch values using getters to avoid direct access to protected members
+        subtotal = self._order.get_subtotal()
+        discount = self._order.get_discount_amount()
+        vat = round((subtotal - discount) * 0.08, 2)
+        total_due = self._amount_due
+
+        print("\nSubtotal: AED", f"{subtotal:.2f}")
+        print("Discount Applied: AED", f"{discount:.2f}")
+        print("VAT (8%): AED", f"{vat:.2f}")
+        print("Total Amount Due (including VAT): AED", f"{total_due:.2f}")
 
     def calculate_vat(self):
         """
-        Calculates and returns the total amount with VAT included.
+        Returns the VAT amount on the discounted subtotal, rounded to two decimal places.
         """
         vat_rate = 0.08  # VAT rate of 8%
-        return self._amount_due * (1 + vat_rate)
+        return round((self._order.get_subtotal() - self._order.get_discount_amount()) * vat_rate, 2)
 
     def get_invoice_id(self):
         """
@@ -346,18 +288,21 @@ class Invoice:
 
     def get_amount_due(self):
         """
-        Returns the amount due for the invoice.
+        Returns the total amount due for the invoice.
         """
         return self._amount_due
 
     def set_amount_due(self, amount_due):
         """
-        Sets a new amount due for the invoice.
+        Sets a new total amount due for the invoice.
         """
         self._amount_due = amount_due
 
 class Discount:
     def __init__(self, discount_type, discount_amount):
+        """
+        Initializes a Discount with a type and amount.
+        """
         self._discount_type = discount_type
         self._discount_amount = discount_amount
 
@@ -365,7 +310,7 @@ class Discount:
         """
         Calculates the discount based on the order's subtotal (before VAT).
         """
-        return order._subtotal * (self._discount_amount / 100)
+        return order.get_subtotal() * (self._discount_amount / 100)
 
     def is_applicable(self, order):
         """
@@ -374,10 +319,13 @@ class Discount:
         - 'bulk' applies if there are 5 or more items in the order.
         """
         if self._discount_type == "loyalty":
-            return order._customer.get_loyalty_status()
+            # Access customer via getter method
+            return order.get_customer().get_loyalty_status()
         elif self._discount_type == "bulk":
+            # Check if the order has 5 or more e-books
             return len(order.get_ebooks()) >= 5
         return False
+
 
 print("______________________________________________________________________________________________")
 # Create several EBook instances
@@ -402,72 +350,38 @@ print("Available EBooks in Catalog:")
 for ebook in catalog.get_ebooks():
     print(ebook.__str__())
 print("______________________________________________________________________________________________")
+
 # Test 1: Customer Abdulla without loyalty buying 2 books (No Discount)
 print("Test 1: Customer Abdulla without loyalty buying 2 books")
 customer1 = Customer("Abdulla", "Abdulla@abdulla.adbulla", False)
-cart1 = ShoppingCart()
-cart1.add_item(ebook1, 1)
-cart1.add_item(ebook2, 1)
 order1 = Order("0001", "2024-10-30", customer1)
-order1.add_ebooks(ebook1)
-order1.add_ebooks(ebook2)
-print("")
-# Display Invoice without any discount
-print("Invoice Without Discount:")
-invoice1_no_discount = order1.generate_invoice()
-invoice1_no_discount.display_invoice()
-print("")
-# Apply no discount as it’s not eligible
-print("Invoice With No Applicable Discount:")
-order1.apply_discounts(Discount("none", 0))  # No discount
-invoice1_with_no_discount = order1.generate_invoice()
-invoice1_with_no_discount.display_invoice()
+order1.add_ebook(ebook1)
+order1.add_ebook(ebook2)
+invoice1 = order1.generate_invoice()
+invoice1.display_invoice()
 print("______________________________________________________________________________________________")
+print("")
 # Test 2: Customer Jasem with loyalty buying 1 book (Loyalty Discount)
 print("Test 2: Customer Jasem with loyalty buying 1 book")
 customer2 = Customer("Jasem", "Jasem@jasem.jasem", True)
-cart2 = ShoppingCart()
-cart2.add_item(ebook3, 1)
 order2 = Order("0002", "2024-10-31", customer2)
-order2.add_ebooks(ebook3)
-print("")
-# Display Invoice without loyalty discount
-print("Invoice Without Loyalty Discount:")
-invoice2_no_discount = order2.generate_invoice()
-invoice2_no_discount.display_invoice()
-print("")
-# Apply loyalty discount and display invoice
-print("Invoice With Loyalty Discount (10%):")
+order2.add_ebook(ebook3)
 loyalty_discount = Discount("loyalty", 10)  # 10% loyalty discount
 order2.apply_discounts(loyalty_discount)
-invoice2_with_loyalty_discount = order2.generate_invoice()
-invoice2_with_loyalty_discount.display_invoice()
+invoice2 = order2.generate_invoice()
+invoice2.display_invoice()
 print("______________________________________________________________________________________________")
+print("")
 # Test 3: Customer Ibrahim without loyalty buying 5 books (Bulk Discount)
 print("Test 3: Customer Ibrahim without loyalty buying 5 books (Bulk Discount)")
 customer3 = Customer("Ibrahim", "Ibrahim@ibrahim.ibrahim", False)
-cart3 = ShoppingCart()
-cart3.add_item(ebook1, 1)
-cart3.add_item(ebook2, 1)
-cart3.add_item(ebook3, 1)
-cart3.add_item(ebook4, 1)
-cart3.add_item(ebook5, 1)
 order3 = Order("0003", "2024-11-01", customer3)
-order3.add_ebooks(ebook1)
-order3.add_ebooks(ebook2)
-order3.add_ebooks(ebook3)
-order3.add_ebooks(ebook4)
-order3.add_ebooks(ebook5)
-print("")
-# Display Invoice without bulk discount
-print("Invoice Without Bulk Discount:")
-invoice3_no_discount = order3.generate_invoice()
-invoice3_no_discount.display_invoice()
-print("")
-# Apply bulk discount and display invoice
-print("Invoice With Bulk Discount (20% for 5+ books):")
-bulk_discount = Discount("bulk", 20)  # 20% bulk discount for 5 or more items
+order3.add_ebook(ebook1)
+order3.add_ebook(ebook2)
+order3.add_ebook(ebook3)
+order3.add_ebook(ebook4)
+order3.add_ebook(ebook5)
+bulk_discount = Discount("bulk", 20)  # 20% bulk discount
 order3.apply_discounts(bulk_discount)
-invoice3_with_bulk_discount = order3.generate_invoice()
-invoice3_with_bulk_discount.display_invoice()
-print("______________________________________________________________________________________________")
+invoice3 = order3.generate_invoice()
+invoice3.display_invoice()
