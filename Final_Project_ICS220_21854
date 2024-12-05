@@ -54,6 +54,7 @@ class BookingSystem:
         except FileNotFoundError:
             return self
 
+
 # Main application class
 class TicketApp:
     def __init__(self, root):
@@ -66,6 +67,8 @@ class TicketApp:
         self.style = ttk.Style()
         self.style.configure("TButton", font=("Arial", 12), background="gold")
         self.main_menu()
+
+
 
     def center_window(self, width, height):
         # Centers the window on the screen
@@ -137,6 +140,7 @@ class TicketApp:
         # Login screen
         self.clear_screen()
         ttk.Label(self.root, text="Login", font=("Arial", 20), background="white").pack(pady=20)
+
         ttk.Label(self.root, text="Username:").pack(pady=5)
         username = ttk.Entry(self.root)
         username.pack(pady=5)
@@ -276,6 +280,7 @@ class TicketApp:
         add_group_ticket()
 
         ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
+
     def admin_dashboard(self):
         # Displays the admin login screen, validates the password, and navigates to the admin dashboard if successful.
         self.clear_screen()
@@ -313,7 +318,8 @@ class TicketApp:
                     )
             history_list.pack(pady=10)
             ttk.Button(self.root, text="Back", command=self.admin_dashboard_menu).pack(pady=10)
-  def manage_accounts():
+
+        def manage_accounts():
             # Displays a list of all user accounts, with options to manage or delete selected accounts.
             self.clear_screen()
             ttk.Label(self.root, text="Manage Accounts", font=("Arial", 20), background="white").pack(pady=20)
