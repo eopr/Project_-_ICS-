@@ -276,3 +276,40 @@ class TicketApp:
         add_group_ticket()
 
         ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
+    def admin_dashboard(self):
+        # Displays the admin login screen, validates the password, and navigates to the admin dashboard if successful.
+        self.clear_screen()
+        ttk.Label(self.root, text="Admin Login", font=("Arial", 20), background="white").pack(pady=20)
+
+        ttk.Label(self.root, text="Enter Admin Password:").pack(pady=5)
+        password_entry = ttk.Entry(self.root, show="*")
+        password_entry.pack(pady=5)
+
+        def validate_admin():
+            if password_entry.get() == "WeLoveMinerva":
+                self.admin_dashboard_menu()
+            else:
+                messagebox.showerror("Error", "Incorrect password!")
+
+        ttk.Button(self.root, text="Login", command=validate_admin).pack(pady=10)
+        ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
+
+    def admin_dashboard_menu(self):
+        # Displays the admin dashboard with options to view purchase history, manage user accounts, or return to the main menu.
+        self.clear_screen()
+        ttk.Label(self.root, text="Admin Dashboard", font=("Arial", 20), background="white").pack(pady=20)
+
+        def view_purchase_history():
+            # Shows a list of all purchase histories for all users, allowing admins to review past orders.
+            self.clear_screen()
+            ttk.Label(self.root, text="Purchase History", font=("Arial", 20), background="white").pack(pady=20)
+
+            history_list = tk.Listbox(self.root, width=60)
+            for account in self.system.accounts:
+                for idx, order in enumerate(account.purchase_history, start=1):
+                    history_list.insert(
+                        tk.END,
+                        f"Username: {account.username}, Order {idx}: {order.ticket_type} - {order.final_price():.2f} AED"
+                    )
+            history_list.pack(pady=10)
+            ttk.Button(self.root, text="Back", command=self.admin_dashboard_menu).pack(pady=10)
