@@ -144,3 +144,135 @@ class TicketApp:
         ttk.Label(self.root, text="Password:").pack(pady=5)
         password = ttk.Entry(self.root, show="*")
         password.pack(pady=5)
+
+        def login():
+            # Validates login credentials
+            account = next((acc for acc in self.system.accounts if acc.username == username.get()), None)
+
+            if account:
+                if account.password == password.get():
+                    messagebox.showinfo("Success", "Login successful!")
+                    self.purchase_tickets(account)
+                else:
+                    messagebox.showerror("Error", "Incorrect password!")
+            else:
+                messagebox.showerror("Error", "Account not found!")
+
+        ttk.Button(self.root, text="Login", command=login).pack(pady=10)
+        ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
+
+    def purchase_tickets(self, account):
+        # Displays the ticket purchasing interface, allowing users to select a date, purchase individual or group tickets, and apply discounts.
+        self.clear_screen()
+        ttk.Label(self.root, text="Purchase Tickets", font=("Arial", 20), background="white").pack(pady=20)
+
+        if hasattr(self, 'last_used_date') and self.last_used_date:
+            default_date = self.last_used_date
+        else:
+            default_date = datetime.datetime.now().strftime("%d/%m/%Y")
+
+        ttk.Label(self.root, text="Select Date (DD/MM/YY):").pack(pady=5)
+
+        date_frame = ttk.Frame(self.root)
+        date_frame.pack(pady=5)
+
+        date_entry = ttk.Entry(date_frame)
+        date_entry.insert(0, default_date)
+        date_entry.grid(row=0, column=0)
+
+        tickets = [
+            Ticket("Single Day Pass", 275, "1 Day", "Access to rides"),
+            Ticket("Two Day Pass", 480, "2 Days", "Access to rides",Discount(10)),
+            Ticket("Annual Membership", 1840, "1 Year", "Unlimited rides"),
+            Ticket("Child Ticket", 185, "1 Day", "Child fun!"),
+            Ticket("VIP Experience Pass", 550, "1 Day", "The VIP experience")
+        ]
+        is_renewal = tk.BooleanVar()
+        renewal_check = ttk.Checkbutton(self.root, text="If you are renewing your annual membership, make sure you check this.", variable=is_renewal)
+        renewal_check.pack(pady=5)
+
+        def validate_date():
+            # Validates the entered date format (DD/MM/YYYY) and returns it, or shows an error message if invalid.
+            try:
+                entered_date = datetime.datetime.strptime(date_entry.get(), "%d/%m/%Y").strftime("%d/%m/%Y")
+                return entered_date
+            except ValueError:
+                messagebox.showerror("Error", "Please enter the date in the format DD/MM/YY!")
+                return None
+
+        def purchase_ticket(ticket):
+            # Processes the purchase of a selected ticket, applies discounts for renewals, and saves the purchase.
+            entered_date = validate_date()
+            if not entered_date:
+                return
+
+            self.last_used_date = entered_date
+
+            if ticket.ticket_type == "VIP Experience Pass" and entered_date == datetime.datetime.now().strftime(
+                    "%d/%m/%Y"):
+                messagebox.showerror("Error", "VIP tickets must be purchased for a future date!")
+                return
+
+            if ticket.ticket_type == "Annual Membership" and is_renewal.get():
+                ticket.discount = Discount(15)
+
+            account.add_ticket(ticket)
+            self.system.save()
+            messagebox.showinfo("Success", f"{ticket.ticket_type} purchased for {entered_date}!")
+            self.purchase_tickets(account)
+
+        ttk.Label(self.root, text="Available Tickets:").pack(pady=5)
+
+        for ticket in tickets:
+            ttk.Button(
+                self.root, text=f"{ticket.ticket_type} - {ticket.price} AED",
+                command=lambda t=ticket: purchase_ticket(t)
+            ).pack(pady=5)
+
+        def add_group_ticket():
+            # Provides functionality for purchasing group tickets by selecting the group size and calculating the total cost.
+            group_size = tk.IntVar(value=10)
+
+            def update_group_cost():
+                cost_label.config(text=f"Total: {group_size.get() * 220} AED")
+
+            def increment_group():
+                group_size.set(group_size.get() + 1)
+                update_group_cost()
+
+            def decrement_group():
+                if group_size.get() > 10:
+                    group_size.set(group_size.get() - 1)
+                update_group_cost()
+
+            ttk.Label(self.root, text="Group Ticket (220 AED per person):").pack(pady=5)
+            frame = ttk.Frame(self.root)
+            frame.pack(pady=5)
+
+            ttk.Button(frame, text="+", command=increment_group).grid(row=0, column=0)
+            ttk.Label(frame, textvariable=group_size).grid(row=0, column=1, padx=10)
+            ttk.Button(frame, text="-", command=decrement_group).grid(row=0, column=2)
+
+            cost_label = ttk.Label(self.root, text=f"Total: {group_size.get() * 220} AED")
+            cost_label.pack(pady=5)
+
+            def confirm_group_ticket():
+                # Finalizes the purchase of a group ticket, validates the date, and saves the transaction.
+                entered_date = validate_date()
+                if not entered_date:
+                    return
+
+                group_ticket = Ticket(
+                    "Group Pass", group_size.get() * 220, "1 Day",
+                    f"Access for {group_size.get()} people"
+                )
+                account.add_ticket(group_ticket)
+                self.system.save()
+                messagebox.showinfo("Success", f"Group Ticket purchased for {entered_date}!")
+                self.purchase_tickets(account)
+
+            ttk.Button(self.root, text="Add Group Ticket", command=confirm_group_ticket).pack(pady=5)
+
+        add_group_ticket()
+
+        ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
