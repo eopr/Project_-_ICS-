@@ -1,1 +1,55 @@
+import tkinter as tk
+from tkinter import messagebox, ttk
+import pickle
+import datetime
 
+# Represents a discount on tickets
+class Discount:
+    def __init__(self, value):
+        self.value = value
+
+    def apply_discount(self, price):
+        return price - (price * self.value / 100)
+
+# Represents a ticket type
+class Ticket:
+    def __init__(self, ticket_type, price, validity, features, discount=None):
+        self.ticket_type = ticket_type
+        self.price = price
+        self.validity = validity
+        self.features = features
+        self.discount = discount
+
+    def final_price(self):
+        return self.discount.apply_discount(self.price) if self.discount else self.price
+
+# Represents a user account
+class Account:
+    def __init__(self, username, password, email):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.purchase_history = []
+
+    def add_ticket(self, ticket):
+        self.purchase_history.append(ticket)
+
+    def delete_ticket(self, index):
+        if 0 <= index < len(self.purchase_history):
+            del self.purchase_history[index]
+
+# Handles data storage and retrieval
+class BookingSystem:
+    def __init__(self):
+        self.accounts = []
+
+    def save(self):
+        with open("datas.pkl", "wb") as file:
+            pickle.dump(self, file)
+
+    def load(self):
+        try:
+            with open("datas.pkl", "rb") as file:
+                return pickle.load(file)
+        except FileNotFoundError:
+            return self
