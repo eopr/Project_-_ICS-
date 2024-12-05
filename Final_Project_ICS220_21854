@@ -313,3 +313,70 @@ class TicketApp:
                     )
             history_list.pack(pady=10)
             ttk.Button(self.root, text="Back", command=self.admin_dashboard_menu).pack(pady=10)
+  def manage_accounts():
+            # Displays a list of all user accounts, with options to manage or delete selected accounts.
+            self.clear_screen()
+            ttk.Label(self.root, text="Manage Accounts", font=("Arial", 20), background="white").pack(pady=20)
+
+            accounts_list = tk.Listbox(self.root, width=50)
+            for account in self.system.accounts:
+                accounts_list.insert(tk.END, f"Username: {account.username}, Email: {account.email}")
+            accounts_list.pack(pady=10)
+
+            def manage_account():
+                # Opens the account management screen for the selected user, allowing admins to view and manage their orders.
+                selected_idx = accounts_list.curselection()
+                if not selected_idx:
+                    messagebox.showerror("Error", "No account selected!")
+                    return
+
+                account = self.system.accounts[selected_idx[0]]
+                self.manage_account_screen(account)
+
+            def delete_account():
+                # Deletes the selected user account and updates the system records.
+                selected_idx = accounts_list.curselection()
+                if not selected_idx:
+                    messagebox.showerror("Error", "No account selected!")
+                    return
+
+                del self.system.accounts[selected_idx[0]]
+                self.system.save()
+                messagebox.showinfo("Success", "Account deleted successfully!")
+                manage_accounts()
+
+            ttk.Button(self.root, text="Manage Selected Account", command=manage_account).pack(pady=10)
+            ttk.Button(self.root, text="Delete Account", command=delete_account).pack(pady=10)
+            ttk.Button(self.root, text="Back", command=self.admin_dashboard_menu).pack(pady=10)
+
+        ttk.Button(self.root, text="View Purchase History", command=view_purchase_history).pack(pady=10)
+        ttk.Button(self.root, text="Manage Accounts", command=manage_accounts).pack(pady=10)
+        ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
+
+    def manage_account_screen(self, account):
+        # Displays the management screen for a specific user's account, showing their purchase history and allowing admins to delete orders.
+        self.clear_screen()
+        ttk.Label(self.root, text=f"Manage {account.username}", font=("Arial", 20), background="white").pack(pady=20)
+
+        orders_list = tk.Listbox(self.root, width=60)
+        for idx, order in enumerate(account.purchase_history, start=1):
+            orders_list.insert(tk.END, f"Order {idx}: {order.ticket_type} - {order.final_price():.2f} AED")
+        orders_list.pack(pady=10)
+
+        def delete_order():
+            # Deletes the selected order from a user's purchase history and updates the system.
+            selected_idx = orders_list.curselection()
+            if not selected_idx:
+                messagebox.showerror("Error", "No order selected!")
+                return
+            account.delete_ticket(selected_idx[0])
+            self.system.save()
+            messagebox.showinfo("Success", "Order deleted successfully!")
+            self.manage_account_screen(account)
+
+        ttk.Button(self.root, text="Delete Selected Order", command=delete_order).pack(pady=10)
+        ttk.Button(self.root, text="Back", command=self.admin_dashboard_menu).pack(pady=10)
+
+root = tk.Tk()
+app = TicketApp(root)
+root.mainloop()
