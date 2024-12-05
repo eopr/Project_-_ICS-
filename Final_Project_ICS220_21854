@@ -53,3 +53,94 @@ class BookingSystem:
                 return pickle.load(file)
         except FileNotFoundError:
             return self
+
+# Main application class
+class TicketApp:
+    def __init__(self, root):
+        booking_system = BookingSystem()
+        self.system = booking_system.load()
+        self.root = root
+        self.root.title("Ticket Booking System")
+        self.root.configure(bg="white")
+        self.center_window(600, 700)
+        self.style = ttk.Style()
+        self.style.configure("TButton", font=("Arial", 12), background="gold")
+        self.main_menu()
+
+    def center_window(self, width, height):
+        # Centers the window on the screen
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        self.root.geometry(f"{width}x{height}+{x}+{y}")
+
+    def clear_screen(self):
+        # Clears the current window
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+    def validate_email(self, email):
+        # Checks email format
+        return "@" in email and "." in email
+
+    def validate_password(self, password):
+        # Ensures password is at least 7 characters
+        return len(password) >= 7
+
+    def main_menu(self):
+        # Main menu options
+        self.clear_screen()
+        ttk.Label(self.root, text="Ticket Booking System", font=("Arial", 24, "bold"), background="white").pack(pady=20)
+
+        ttk.Button(self.root, text="Create Account", command=self.create_account).pack(pady=10)
+        ttk.Button(self.root, text="Login", command=self.login_screen).pack(pady=10)
+        ttk.Button(self.root, text="Admin Dashboard", command=self.admin_dashboard).pack(pady=10)
+        ttk.Button(self.root, text="Exit", command=self.root.quit).pack(pady=10)
+
+    def create_account(self):
+        # Allows user to create an account
+        self.clear_screen()
+        ttk.Label(self.root, text="Create Account", font=("Arial", 20), background="white").pack(pady=20)
+
+        ttk.Label(self.root, text="Username:").pack(pady=5)
+        username = ttk.Entry(self.root)
+        username.pack(pady=5)
+
+        ttk.Label(self.root, text="Password:").pack(pady=5)
+        password = ttk.Entry(self.root, show="*")
+        password.pack(pady=5)
+
+        ttk.Label(self.root, text="Email:").pack(pady=5)
+        email = ttk.Entry(self.root)
+        email.pack(pady=5)
+
+        def save_account():
+            # Validates and saves account details
+            if not self.validate_email(email.get()):
+                messagebox.showerror("Error", "Invalid email format.")
+            elif not self.validate_password(password.get()):
+                messagebox.showerror("Error", "Password must be at least 7 characters.")
+            elif any(acc.username == username.get() for acc in self.system.accounts):
+                messagebox.showerror("Error", "Username already exists! Please choose a different username.")
+            else:
+                account = Account(username.get(), password.get(), email.get())
+                self.system.accounts.append(account)
+                self.system.save()
+                messagebox.showinfo("Success", "Account created successfully!")
+                self.main_menu()
+
+        ttk.Button(self.root, text="Create Account", command=save_account).pack(pady=10)
+        ttk.Button(self.root, text="Back", command=self.main_menu).pack(pady=10)
+
+    def login_screen(self):
+        # Login screen
+        self.clear_screen()
+        ttk.Label(self.root, text="Login", font=("Arial", 20), background="white").pack(pady=20)
+        ttk.Label(self.root, text="Username:").pack(pady=5)
+        username = ttk.Entry(self.root)
+        username.pack(pady=5)
+
+        ttk.Label(self.root, text="Password:").pack(pady=5)
+        password = ttk.Entry(self.root, show="*")
+        password.pack(pady=5)
